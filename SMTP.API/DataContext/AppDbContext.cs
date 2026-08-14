@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using SMTP.API.Models;
 
 namespace SMTP.API.DataContext
 {
@@ -8,5 +9,7 @@ namespace SMTP.API.DataContext
         {
             
         }
+
+        public DbSet<UserModel> Users { get; set; }
     }
 }
