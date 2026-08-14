@@ -11,5 +11,6 @@ namespace SMTP.API.DataContext
         }
 
         public DbSet<UserModel> Users { get; set; }
+        public DbSet<MembroModel> Membros { get; set; }
     }
 }
