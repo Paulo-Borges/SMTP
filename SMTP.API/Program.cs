@@ -25,6 +25,17 @@ builder.Services.AddMediatR(cfg =>
 );
 
 
+// -------------x-------X ------Cors-----X---------------------------------------
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("LiberarTudo", policy =>
+    {
+        policy.WithOrigins("http://localhost:4200") // Origens do seu frontend
+              .AllowAnyMethod()
+              .AllowAnyHeader()
+              .AllowCredentials(); // Permite envio de credenciais/cookies
+    });
+});
 
 
 var app = builder.Build();
@@ -39,6 +50,8 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+
+app.UseCors("LiberarTudo");
 
 app.UseAuthorization();
 
