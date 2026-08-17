@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity.Data;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using SMTP.API.DataContext;
 using SMTP.API.DTOs;
 
@@ -14,11 +15,12 @@ namespace SMTP.API.Controllers
     [Route("api/auth")]
     public class AppController : ControllerBase
     {
-
+        private readonly AppDbContext _context;
         private readonly ISender _sender;
-        public AppController(ISender sender)
+        public AppController(ISender sender, AppDbContext context)
         {
             _sender = sender;
+            _context = context;
         }
 
 
@@ -39,26 +41,31 @@ namespace SMTP.API.Controllers
         }
 
         [HttpGet("membros")]
-        public IActionResult GetMembros()
+        public async Task<IActionResult> GetMembros()
         {
-            // Exemplo retornando lista mockada ou vinda do serviço/banco
-            var membros = new List<object>
-            {
-                new { id = 1, nome = "Membro 1" },
-                new { id = 2, nome = "Membro 2" }
-            };
+            var membros = await _context.Membros.ToListAsync();
+
+            //// Exemplo retornando lista mockada ou vinda do serviço/banco----------X---
+            //var membros = new List<object>
+            //{
+            //    new { id = 1, nome = "Membro 1" },
+            //    new { id = 2, nome = "Membro 2" }
+            //};
 
             return Ok(membros);
         }
 
         [HttpGet("users")]
-        public IActionResult GetUsers()
+        public async Task<IActionResult> GetUsers()
         {
-            var users = new List<object>
-            {
-                new { id = 1, nome = "User 1" },
-                new { id = 2, nome = "User 2" }
-            };
+            var users = await _context.Users.ToListAsync();
+
+            //  USANDO O BACKENDO MOCKADO--------------X----------------X---------------
+            //var users = new List<object>
+            //{
+            //    new { id = 1, nome = "User 1" },
+            //    new { id = 2, nome = "User 2" }
+            //};
 
             return Ok(users);
         }
