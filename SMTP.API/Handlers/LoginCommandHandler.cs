@@ -9,13 +9,17 @@ namespace SMTP.API.Handlers
         // 2. Removido o ponto e vírgula ';' após a assinatura do método e adicionadas as chaves { }
         public async Task<string> Handle(LoginCommand request, CancellationToken cancellationToken)
         {
-            // 1. Lógica de autenticação
-            if (request.Email == "admin@email.com" && request.Password == "123456")
-            {
-                return "TokenJWTDeExemploAqui12345";
-            }
 
-            throw new UnauthorizedAccessException();
+            return await Task.FromResult("TokenJWTDeExemploAqui12345");
+
+
+            //// 1. Lógica de autenticação--------X------MOCKADO--------------X-------------------
+            //if (request.Email == "admin@email.com" && request.Password == "123456")
+            //{
+            //    return "TokenJWTDeExemploAqui12345";
+            //}
+
+            //throw new UnauthorizedAccessException();
         }
     }
 }
