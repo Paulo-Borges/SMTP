@@ -12,5 +12,15 @@ namespace SMTP.API.DataContext
 
         public DbSet<UserModel> Users { get; set; }
         public DbSet<MembroModel> Membros { get; set; }
+
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<MembroModel>()
+                .HasOne(m => m.User)
+                .WithMany(u => u.Membros)
+                .HasForeignKey(m => m.UserId)
+                .OnDelete(DeleteBehavior.Cascade);
+        }
     }
 }

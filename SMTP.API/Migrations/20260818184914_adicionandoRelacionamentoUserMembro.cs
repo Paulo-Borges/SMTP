@@ -58,5 +58,19 @@ namespace SMTP.API.Migrations
                 principalColumn: "Id",
                 onDelete: ReferentialAction.Cascade);
         }
+        protected override void Down(MigrationBuilder migrationBuilder)
+        {
+            migrationBuilder.DropForeignKey(
+                name: "FK_Membros_Users_UserId",
+                table: "Membros");
+
+            migrationBuilder.DropIndex(
+                name: "IX_Membros_UserId",
+                table: "Membros");
+
+            migrationBuilder.DropColumn(
+                name: "UserId",
+                table: "Membros");
+        }
     }
 }

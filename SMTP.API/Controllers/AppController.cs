@@ -55,6 +55,33 @@ namespace SMTP.API.Controllers
             return Ok(membros);
         }
 
+        [HttpPost("membros")]
+        public async Task<IActionResult> CreateMembro([FromBody] DTOCreateMembroRequest request)
+        {
+            var userExiste = await _context.Users.AnyAsync(u => u.Id == request.UserId);
+            if(!userExiste)
+            {
+                return BadRequest(new { message = $"UserId {request.UserId} não existe." });
+            }
+            var membro = new Models.MembroModel
+            {
+                Nome = request.Nome,
+                Cargo = request.Cargo,
+                UserId = request.UserId
+            };
+
+            _context.Membros.Add(membro);
+            await _context.SaveChangesAsync();
+
+            return CreatedAtAction(nameof(GetMembros), new { id = membro.Id }, new
+            {
+                membro.Id,
+                membro.Nome,
+                membro.Cargo,
+                membro.UserId
+            });
+        }
+
         [HttpGet("users")]
         public async Task<IActionResult> GetUsers()
         {
