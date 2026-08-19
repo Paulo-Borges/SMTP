@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using SMTP.API.DataContext;
 using SMTP.API.DTOs;
+using SMTP.API.Models;
 
 namespace SMTP.API.Controllers
 {
@@ -80,6 +81,39 @@ namespace SMTP.API.Controllers
                 membro.Cargo,
                 membro.UserId
             });
+        }
+        [HttpPost("users")]
+        public async Task<IActionResult> CreateUser([FromBody] DTOCreateUser dto)
+        {
+            var existe = await _context.Users.AnyAsync(u => u.Email == dto.Email || u.Nome == dto.Nome || u.Cpf == dto.Cpf);
+            if(existe)
+            {
+                return BadRequest(new { mensagem = "E-mail ou CPF já cadastrado." });
+            }
+            var user = new UserModel
+            {
+                Nome = dto.Nome,
+                Email = dto.Email,
+                Cpf = dto.Cpf,
+            };
+
+            _context.Users.Add(user);
+            await _context.SaveChangesAsync();
+
+            return CreatedAtRoute("ObterPorId", new { id = user.Id }, user);
+        }
+
+        [HttpGet("{id:int}", Name = "ObterPorId")]
+        public async Task<IActionResult> ObterPorId(int id)
+        {
+            var user = await _context.Users.FindAsync(id);
+
+            if (user is null)
+            {
+                return NotFound();
+            }
+
+            return Ok(user);
         }
 
         [HttpGet("users")]
