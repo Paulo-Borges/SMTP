@@ -1,5 +1,20 @@
 using Microsoft.EntityFrameworkCore;
 using SMTP.API.DataContext;
+using SMTP.API.SendEmail;
+
+//var outlook = new Email("smtp.office365.com", "borgespaulo72@yahoo.com.br", "");
+
+//outlook.SendEmail(
+//    emailsTo: new List<string>
+//{
+//    "borgespaulo08@gmail.com"
+//},
+//subject: "Teste",
+//body: "Degue Anexo",
+//attachments: new List<string>
+//{
+//    @"C:/Users/USER/Downloads/Usuarios.xlsx"
+//});
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -25,15 +40,17 @@ builder.Services.AddMediatR(cfg =>
 );
 
 
-// -------------x-------X ------Cors-----X---------------------------------------
+// Registrar serviço de email com injeção de dependência
+builder.Services.AddScoped<IEmailService, Email>();
+
+// Configure CORS - Liberar Tudo
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("LiberarTudo", policy =>
     {
-        policy.WithOrigins("http://localhost:4200") // Origens do seu frontend
-              .AllowAnyMethod()
-              .AllowAnyHeader()
-              .AllowCredentials(); // Permite envio de credenciais/cookies
+        policy.AllowAnyOrigin()        // Permite qualquer origem
+              .AllowAnyMethod()         // Permite qualquer método HTTP (GET, POST, PUT, DELETE, etc)
+              .AllowAnyHeader();        // Permite qualquer header
     });
 });
 

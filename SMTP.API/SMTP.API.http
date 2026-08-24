@@ -1,6 +1,65 @@
 @SMTP.API_HostAddress = http://localhost:5062
 
-GET {{SMTP.API_HostAddress}}/weatherforecast/
+### Teste Health Check - Verificar se o serviço de email está rodando
+GET {{SMTP.API_HostAddress}}/api/email/health
 Accept: application/json
+
+###
+
+### Validar um Email - Verificar se um email é válido
+POST {{SMTP.API_HostAddress}}/api/email/validar
+Content-Type: application/json
+
+"borgespaulo08@gmail.com"
+
+###
+
+### Enviar Email Simples - Teste básico de envio
+POST {{SMTP.API_HostAddress}}/api/email/enviar
+Content-Type: application/json
+
+{
+  "destinatarios": ["borgespaulo08@gmail.com"],
+  "assunto": "Teste de Email - Sistema SMTP",
+  "corpo": "<h1>Olá!</h1><p>Este é um teste de envio de email.</p>",
+  "anexos": []
+}
+
+###
+
+### Enviar Email para Múltiplos Destinatários
+POST {{SMTP.API_HostAddress}}/api/email/enviar
+Content-Type: application/json
+
+{
+  "destinatarios": [
+    "borgespaulo08@gmail.com",
+    "devborges50@gmail.com"
+  ],
+  "assunto": "Teste para Múltiplos Destinatários",
+  "corpo": "<h1>Email para múltiplos destinatários</h1><p>Conteúdo do email...</p>",
+  "anexos": []
+}
+
+###
+
+### Validar Email Inválido
+POST {{SMTP.API_HostAddress}}/api/email/validar
+Content-Type: application/json
+
+"emailinvalido@"
+
+###
+
+### Teste com Email Vazio (deve retornar erro)
+POST {{SMTP.API_HostAddress}}/api/email/enviar
+Content-Type: application/json
+
+{
+  "destinatarios": [],
+  "assunto": "Teste",
+  "corpo": "Teste",
+  "anexos": []
+}
 
 ###

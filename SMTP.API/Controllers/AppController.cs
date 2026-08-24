@@ -32,8 +32,8 @@ namespace SMTP.API.Controllers
         {
             try
             {
-                var response = await _sender.Send(new LoginCommand(request.Email, request.Password), ct);
-                return Ok(response);
+                var token = await _sender.Send(new LoginCommand(request.Email, request.Password), ct);
+                return Ok(new DTOLoginResponse { Token = token });
             }
             catch (UnauthorizedAccessException)
             {
